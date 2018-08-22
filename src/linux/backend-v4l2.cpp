@@ -1669,7 +1669,7 @@ namespace librealsense
 
                             uvc_meta_buffer md_buf{};
                             uvc_header md_hdr{};
-                            memcpy(&md_buf,md_start,buf.bytesused);
+                            memcpy(&md_buf,md_start,std::min<size_t>(buf.bytesused, sizeof(md_buf)));
                             memcpy(&md_hdr,(uint8_t*)md_start+10,sizeof(uvc_header));
                             LOG_INFO("Metadata struct " << std::dec
                                      << " ns: " << md_buf.ns
