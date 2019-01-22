@@ -1058,8 +1058,11 @@ namespace librealsense
         {
             uvc_xu_control_query q = {static_cast<uint8_t>(xu.unit), control, UVC_GET_CUR,
                                       static_cast<uint16_t>(size), const_cast<uint8_t *>(data)};
+            retry:
             if(xioctl(_fd, UVCIOC_CTRL_QUERY, &q) < 0)
             {
+                if (errno == EBUSY)
+                    goto retry;
                 if (errno == EIO || errno == EAGAIN) // TODO: Log?
                     return false;
 
